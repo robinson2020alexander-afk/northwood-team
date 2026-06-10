@@ -1,0 +1,12 @@
+{
+  "name": "Team Hub",
+  "short_name": "Team Hub",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3f2f4",
+  "theme_color": "#d12f2f",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#d12f2f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Team Hub</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1781086416">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <img src="icon-180.png" class="logo" alt="">
+      <h1 id="teamName">Team Hub</h1>
+      <div class="who" id="whoBox"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- TEAM -->
+    <section id="view-team" class="view">
+      <div id="teamBanner2" class="team-banner hide"></div>
+      <div class="card team-head-card">
+        <img src="icon-180.png" class="team-crest" alt="">
+        <div>
+          <div class="team-name" id="teamNameBig">Team</div>
+          <div class="muted" id="teamCount" style="font-size:13px"></div>
+        </div>
+      </div>
+      <div class="section-title">Players</div>
+      <div id="teamRoster"><div class="muted card">Loading…</div></div>
+      <div class="section-title">Invite team</div>
+      <div class="card">
+        <p class="muted" style="margin:0 0 4px">Share this link with players and parents — the team code is built in, so they can sign up straight away.</p>
+        <div class="row">
+          <button class="btn" id="waShareBtn">💬 Share on WhatsApp</button>
+          <button class="btn ghost" id="copyLinkBtn">📋 Copy link</button>
+        </div>
+        <div class="invite-code">Team code: <b id="inviteCode"></b></div>
+      </div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section id="view-schedule" class="view active">
+      <div class="page-head">
+        <button id="schedToggle" class="page-title">Upcoming <span class="pt-chev">▾</span></button>
+        <button id="addEvBtn" class="add-btn hide" title="Add event">＋</button>
+      </div>
+      <div class="chips">
+        <button class="chip" id="syncChip">🔄 Sync</button>
+        <button class="chip hide" id="statsChip">🏅 Attendance stats</button>
+      </div>
+      <div id="teamBanner" class="team-banner hide"></div>
+      <div id="pushBanner" class="push-banner hide">
+        <span id="pushBannerText">🔔 Get a reminder on your phone to set your child's availability</span>
+        <button id="pushBtn" class="btn small">Turn on</button>
+      </div>
+      <div id="scheduleList"></div>
+    </section>
+
+    <!-- NEWS -->
+    <section id="view-news" class="view"><div id="newsList"></div></section>
+
+    <!-- SESSION DETAIL -->
+    <section id="view-session" class="view">
+      <a class="backlink" id="sessionBack">← Back</a>
+      <div id="sessionDetail"></div>
+    </section>
+
+    <!-- YOU (account / family) -->
+    <section id="view-you" class="view">
+      <div class="section-title">Your details</div>
+      <div class="card">
+        <label>Your name</label>
+        <input id="setName" placeholder="Parent / guardian name">
+        <label>Email</label>
+        <input id="setEmail" type="email" placeholder="you@email.com">
+        <label>Phone</label>
+        <input id="setPhone" type="tel" placeholder="07…">
+        <button class="btn small" id="saveAcctBtn">Save details</button>
+        <div class="err" id="setErr"></div>
+      </div>
+      <div class="section-title">Your children</div>
+      <div id="childrenAdmin"></div>
+      <div class="card">
+        <label>Add a child</label>
+        <input id="newChildName" placeholder="Child's name">
+        <button class="btn small" id="addChildBtn">Add child</button>
+        <div class="err" id="addChildErr"></div>
+      </div>
+      <div class="section-title">Coach</div>
+      <button class="btn ghost" id="coachToolsBtn">🛡️ Coach tools</button>
+      <button class="btn ghost" id="logoutBtn" style="margin:12px 0 10px">Log out</button>
+    </section>
+
+    <!-- COACH -->
+    <section id="view-coach" class="view">
+      <a class="backlink" id="coachBack">← Back to schedule</a>
+      <div id="coachGate" class="card">
+        <h3 style="margin:0 0 4px">Coach login</h3>
+        <p class="muted">Enter the coach passcode to manage the team.</p>
+        <input id="coachPass" type="password" placeholder="Passcode" autocomplete="off">
+        <button class="btn" id="coachLoginBtn">Log in</button>
+        <div class="err" id="coachErr"></div>
+      </div>
+
+      <div id="coachPanel" class="hide">
+        <div class="subnav">
+          <button data-sub="manage" class="active">Manage</button>
+          <button data-sub="players">Players</button>
+          <button data-sub="stats">Stats</button>
+        </div>
+
+        <div id="sub-manage" class="subview active">
+          <div class="section-title">Team name</div>
+          <div class="card">
+            <label>Team name (change each season)</label>
+            <input id="teamNameInput" placeholder="e.g. Northwood U10 Reds">
+            <button class="btn small" id="saveTeamNameBtn">Save name</button>
+            <div class="err" id="teamErr"></div>
+            <label style="margin-top:16px">Team photo (shown on the Schedule)</label>
+            <button class="btn ghost small" id="teamPhotoBtn">📷 Upload team photo</button>
+            <input id="teamPhotoInput" type="file" accept="image/*" class="hide">
+          </div>
+
+          <div class="section-title">Add event</div>
+          <div class="card">
+            <label>Title</label>
+            <input id="evTitle" placeholder="e.g. Training, vs Eastcote U10">
+            <div class="row">
+              <div>
+                <label>Type</label>
+                <select id="evKind">
+                  <option value="training">Training</option>
+                  <option value="match">Match</option>
+                  <option value="tournament">Tournament</option>
+                  <option value="social">Social</option>
+                </select>
+              </div>
+              <div>
+                <label>Duration (min)</label>
+                <input id="evDur" type="number" value="60" min="15" step="15">
+              </div>
+            </div>
+            <div class="row">
+              <div><label>Date</label><input id="evDate" type="date"></div>
+              <div><label>Time</label><input id="evTime" type="time" value="18:00"></div>
+            </div>
+            <label>Location</label>
+            <input id="evLoc" placeholder="Location">
+            <label>Notes (optional)</label>
+            <textarea id="evNotes" placeholder="Bring boots, meet 15 min early…"></textarea>
+            <label>Repeat</label>
+            <select id="evRepeat">
+              <option value="none">Does not repeat</option>
+              <option value="weekly">Weekly (same day &amp; time)</option>
+            </select>
+            <div id="evUntilWrap" class="hide">
+              <label>Repeat until</label>
+              <select id="evUntil"></select>
+            </div>
+            <label>Who can see this?</label>
+            <select id="evAudience">
+              <option value="all">Everyone (based on each player's access)</option>
+              <option value="invite">Only selected players…</option>
+            </select>
+            <div id="evInviteList" class="invite-list hide"></div>
+            <button class="btn" id="addEventBtn">Add to schedule</button>
+            <div class="err" id="evErr"></div>
+          </div>
+
+          <div class="section-title">Post announcement</div>
+          <div class="card">
+            <label>Title (optional)</label>
+            <input id="anTitle" placeholder="e.g. Kit reminder">
+            <label>Message</label>
+            <textarea id="anBody" placeholder="Write a message for the whole team…"></textarea>
+            <button class="btn" id="postAnnBtn">Post announcement</button>
+            <button class="btn ghost" id="emailAnnBtn" style="margin-top:8px">Also email it to all parents</button>
+            <div class="err" id="anErr"></div>
+          </div>
+
+          <div class="section-title">All events</div>
+          <div id="coachEvents"><div class="muted">Loading…</div></div>
+        </div>
+
+        <div id="sub-players" class="subview">
+          <div class="section-title">Players &amp; what they can see</div>
+          <p class="muted" style="margin:0 0 10px">Tick the session types each player should see.</p>
+          <div id="playersAdmin"><div class="muted">Loading…</div></div>
+          <button class="btn ghost small" id="remindBtn" style="margin-top:6px">📧 Remind parents who haven't replied</button>
+        </div>
+
+        <div id="sub-stats" class="subview">
+          <div class="section-title">Attendance stats</div>
+          <p class="muted" style="margin:0 0 10px">Past events each player was eligible for. "Attended" = marked Going.</p>
+          <div id="statsBox"><div class="muted">Loading…</div></div>
+        </div>
+
+        <button class="btn ghost" id="coachLogout" style="margin:14px 0 10px">Log out of coach</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button data-tab="team"><span class="ico">🏟️</span>Team</button>
+    <button data-tab="schedule" class="active"><span class="ico">📅</span>Schedule</button>
+    <button data-tab="news"><span class="ico">💬</span>Messages</button>
+    <button data-tab="you"><span class="ico">👤</span>You</button>
+  </nav>
+
+  <!-- LOGIN / SIGN-UP modal -->
+  <div id="joinModal" class="modal-bg hide">
+    <div class="modal">
+      <!-- step 1: team code -->
+      <div id="step-code">
+        <h2>Log in</h2>
+        <p>Enter your team code to continue.</p>
+        <label>Team code</label>
+        <input id="joinCode" placeholder="e.g. TEAM2026" autocapitalize="characters" autocomplete="off">
+        <button class="btn" id="codeBtn">Continue</button>
+        <div class="err" id="codeErr"></div>
+      </div>
+
+      <!-- step 2: pick your account -->
+      <div id="step-pick" class="hide">
+        <h2>Welcome back 👋</h2>
+        <p>Tap your name to log in.</p>
+        <div id="pickList" class="pick-list"></div>
+        <button class="btn ghost" id="newBtn">＋ I'm new — create an account</button>
+        <a class="backlink" data-back="code">← Use a different code</a>
+      </div>
+
+      <!-- step 3: create parent account + children -->
+      <div id="step-new" class="hide">
+        <h2>Create your account</h2>
+        <p>You're the parent/guardian. Add your child(ren) — you'll set their availability for them.</p>
+        <label>Your name (parent/guardian)</label>
+        <input id="pName" placeholder="Your name">
+        <label>Email (optional — for reminders)</label>
+        <input id="pEmail" type="email" placeholder="you@email.com">
+        <div class="section-title" style="margin-left:0">Your children</div>
+        <div id="childRows"></div>
+        <button type="button" class="btn ghost small" id="addChildRow">＋ Add another child</button>
+        <button class="btn" id="createAcctBtn">Create account</button>
+        <a class="backlink" data-back="pick">← Back</a>
+        <div class="err" id="newErr"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- hidden input for changing a child's photo -->
+  <input id="childPhotoInput" type="file" accept="image/*" class="hide">
+
+  <div id="toast" class="toast"></div>
+
+  <script src="config.js?v=1781086416"></script>
+  <script src="app.js?v=1781086416"></script>
+</body>
+</html>
